@@ -95,8 +95,8 @@ void SynchronizationApplication::OnTangoServiceConnected(JNIEnv* env,
 }
 
 void SynchronizationApplication::TangoSetupConfig() {
-  SetDepthAlphaValue(0.0);
-  SetGPUUpsample(false);
+  SetDepthAlphaValue(0.5);
+  SetGPUUpsample(true);
 
   if (tango_config_ != nullptr) {
     return;

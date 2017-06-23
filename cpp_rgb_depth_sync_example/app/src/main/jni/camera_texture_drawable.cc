@@ -135,4 +135,9 @@ void CameraTextureDrawable::RenderImage(
   tango_gl::util::CheckGlError("CameraTextureDrawable::render");
 }
 
+void CameraTextureDrawable::OutputImage() {
+
+}
+
+
 }  // namespace rgb_depth_sync

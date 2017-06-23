@@ -32,6 +32,9 @@ class CameraTextureDrawable {
   // Render the color texture on screen.
   void RenderImage(TangoSupportRotation camera_to_display_rotation);
 
+  // Output the color texture to a file.
+  void OutputImage();
+
   // Call this function when the GL context has been reinitialized
   void InitializeGL();
 

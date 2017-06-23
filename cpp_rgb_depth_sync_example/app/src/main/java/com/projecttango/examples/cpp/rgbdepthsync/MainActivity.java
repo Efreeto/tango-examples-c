@@ -146,9 +146,11 @@ public class MainActivity extends Activity {
 
     mdebugOverlayCheckbox = (CheckBox) findViewById(R.id.debug_overlay_checkbox);
     mdebugOverlayCheckbox.setOnCheckedChangeListener(new DebugOverlayCheckboxListener());
+    mdebugOverlayCheckbox.setChecked(true);
 
     mGPUUpsampleCheckbox = (CheckBox) findViewById(R.id.gpu_upsample_checkbox);
     mGPUUpsampleCheckbox.setOnCheckedChangeListener(new GPUUpsampleListener());
+    mGPUUpsampleCheckbox.setChecked(true);
 
     // OpenGL view where all of the graphics are drawn
     mGLView = (GLSurfaceView) findViewById(R.id.gl_surface_view);

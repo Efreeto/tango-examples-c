@@ -55,6 +55,7 @@ void Scene::Render(GLuint color_texture, GLuint depth_texture,
   camera_texture_drawable_.SetColorTextureId(color_texture);
   camera_texture_drawable_.SetDepthTextureId(depth_texture);
   camera_texture_drawable_.RenderImage(camera_to_display_rotation);
+  camera_texture_drawable_.OutputImage();
 }
 
 void Scene::InitializeGL() { camera_texture_drawable_.InitializeGL(); }
