@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
@@ -54,6 +55,7 @@ public class MainActivity extends Activity {
   private SeekBar mDepthOverlaySeekbar;
   private CheckBox mdebugOverlayCheckbox;
   private CheckBox mGPUUpsampleCheckbox;
+  private Button mCaptureButton;
 
     
   // Tango Service connection.
@@ -107,6 +109,13 @@ public class MainActivity extends Activity {
     }
   }
 
+  private class CaptureButtonListener implements Button.OnClickListener {
+    @Override
+    public void onClick(View buttonView) {
+      TangoJNINative.captureImage();
+    }
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -151,6 +160,9 @@ public class MainActivity extends Activity {
     mGPUUpsampleCheckbox = (CheckBox) findViewById(R.id.gpu_upsample_checkbox);
     mGPUUpsampleCheckbox.setOnCheckedChangeListener(new GPUUpsampleListener());
     mGPUUpsampleCheckbox.setChecked(true);
+
+    mCaptureButton = (Button) findViewById(R.id.capture_button);
+    mCaptureButton.setOnClickListener(new CaptureButtonListener());
 
     // OpenGL view where all of the graphics are drawn
     mGLView = (GLSurfaceView) findViewById(R.id.gl_surface_view);

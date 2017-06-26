@@ -38,4 +38,12 @@
         android:layout_alignParentEnd="true"
         android:checked="false"
         android:layout_margin="2dp" />
+
+    <Button
+        android:id="@+id/capture_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/depth_overlay_alpha_seekbar"
+        android:layout_centerHorizontal="true"
+        android:text="Capture" />
 </RelativeLayout>

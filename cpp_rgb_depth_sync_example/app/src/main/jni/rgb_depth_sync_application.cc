@@ -316,6 +316,10 @@ void SynchronizationApplication::SetDepthAlphaValue(float alpha) {
 
 void SynchronizationApplication::SetGPUUpsample(bool on) { gpu_upsample_ = on; }
 
+void SynchronizationApplication::CaptureImage() {
+  main_scene_.CaptureImage();
+}
+
 void SynchronizationApplication::OnDisplayChanged(int display_rotation,
                                                   int color_camera_rotation) {
   color_camera_to_display_rotation_ =

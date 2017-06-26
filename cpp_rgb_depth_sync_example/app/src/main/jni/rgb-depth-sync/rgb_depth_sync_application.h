@@ -90,6 +90,9 @@ class SynchronizationApplication {
   // Set whether to use GPU or CPU upsampling
   void SetGPUUpsample(bool on);
 
+  // Output the view to a file in RGBD format
+  void CaptureImage();
+
   // Callback for display change event, we use this function to detect display
   // orientation change.
   //

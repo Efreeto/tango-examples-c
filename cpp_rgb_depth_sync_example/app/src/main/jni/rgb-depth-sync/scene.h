@@ -51,6 +51,9 @@ class Scene {
   // Set the depth texture's alpha blending value. The range is [0.0, 1.0].
   void SetDepthAlphaValue(float alpha);
 
+  // Output the view to a file in RGBD format
+  void CaptureImage();
+
  private:
   GLsizei viewport_width_;
   GLsizei viewport_height_;
