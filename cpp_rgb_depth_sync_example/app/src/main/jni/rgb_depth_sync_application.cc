@@ -317,7 +317,7 @@ void SynchronizationApplication::SetDepthAlphaValue(float alpha) {
 void SynchronizationApplication::SetGPUUpsample(bool on) { gpu_upsample_ = on; }
 
 void SynchronizationApplication::CaptureImage() {
-  main_scene_.CaptureImage();
+    main_scene_.capture_ = true;
 }
 
 void SynchronizationApplication::OnDisplayChanged(int display_rotation,

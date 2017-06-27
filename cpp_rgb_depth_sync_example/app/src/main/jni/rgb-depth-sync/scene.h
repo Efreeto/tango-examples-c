@@ -54,7 +54,9 @@ class Scene {
   // Output the view to a file in RGBD format
   void CaptureImage();
 
- private:
+  bool capture_;
+
+private:
   GLsizei viewport_width_;
   GLsizei viewport_height_;
 
