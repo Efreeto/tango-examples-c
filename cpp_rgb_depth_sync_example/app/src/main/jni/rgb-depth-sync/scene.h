@@ -25,6 +25,7 @@
 #include "rgb-depth-sync/camera_texture_drawable.h"
 #include "rgb-depth-sync/color_image.h"
 #include "rgb-depth-sync/depth_image.h"
+#include "rgb-depth-sync/bitmap.h"
 
 namespace rgb_depth_sync {
 // The Scene class is responsible for managing rendering for the application.
@@ -54,11 +55,11 @@ class Scene {
   // Output the view to a file in RGBD format
   void CaptureImage();
 
-  bool capture_;
-
 private:
   GLsizei viewport_width_;
   GLsizei viewport_height_;
+  int capture_mode_;
+  float prev_alpha_value_;
 
   CameraTextureDrawable camera_texture_drawable_;
 };

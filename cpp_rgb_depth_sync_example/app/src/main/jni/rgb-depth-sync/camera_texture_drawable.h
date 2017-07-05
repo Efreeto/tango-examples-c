@@ -47,6 +47,10 @@ class CameraTextureDrawable {
   // @param texture_id: texture id which we set the depth_texture_id_
   void SetDepthTextureId(GLuint texture_id) { depth_texture_id_ = texture_id; }
 
+  // Returns current alpha blend value.
+  // @return: alpha blend value
+  float GetBlendAlpha() const { return blend_alpha_; }
+
   // Alpha blend value for depth texture and color camera texture.
   // The value range is [0.0f, 1.0f].
   // @param blend_alpha: Blending value between rgb and depth texture.

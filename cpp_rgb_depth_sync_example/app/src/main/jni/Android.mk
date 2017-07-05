@@ -19,6 +19,13 @@ PROJECT_ROOT_FROM_JNI:= ../../../../..
 PROJECT_ROOT:= $(call my-dir)/../../../../..
 
 include $(CLEAR_VARS)
+
+# OpenCV
+OPENCV_INSTALL_MODULES:=on
+OPENCV_CAMERA_MODULES:=off
+OPENCV_LIB_TYPE:=STATIC
+include C:\Libraries\OpenCV-android-sdk\sdk\native\jni\OpenCV.mk
+
 LOCAL_MODULE    := libcpp_rgb_depth_sync_example
 
 LOCAL_SHARED_LIBRARIES := tango_client_api tango_support_api
@@ -34,6 +41,7 @@ LOCAL_SRC_FILES := camera_texture_drawable.cc \
                    jni_interface.cc \
                    rgb_depth_sync_application.cc \
                    scene.cc \
+                   bitmap.cpp \
                    util.cc \
                    $(PROJECT_ROOT_FROM_JNI)/tango_gl/src/bounding_box.cc \
                    $(PROJECT_ROOT_FROM_JNI)/tango_gl/src/camera.cc \
