@@ -25,7 +25,7 @@
 #include "rgb-depth-sync/camera_texture_drawable.h"
 #include "rgb-depth-sync/color_image.h"
 #include "rgb-depth-sync/depth_image.h"
-#include "rgb-depth-sync/bitmap.h"
+#include "rgb-depth-sync/RGBDFile.h"
 
 namespace rgb_depth_sync {
 // The Scene class is responsible for managing rendering for the application.
@@ -62,6 +62,7 @@ private:
   float prev_alpha_value_;
 
   CameraTextureDrawable camera_texture_drawable_;
+  RGBDFile rgbd_file_;
 };
 }  // namespace rgb_depth_sync
 

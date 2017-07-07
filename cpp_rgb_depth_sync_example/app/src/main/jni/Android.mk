@@ -41,7 +41,7 @@ LOCAL_SRC_FILES := camera_texture_drawable.cc \
                    jni_interface.cc \
                    rgb_depth_sync_application.cc \
                    scene.cc \
-                   bitmap.cpp \
+                   RGBDFile.cpp \
                    util.cc \
                    $(PROJECT_ROOT_FROM_JNI)/tango_gl/src/bounding_box.cc \
                    $(PROJECT_ROOT_FROM_JNI)/tango_gl/src/camera.cc \
