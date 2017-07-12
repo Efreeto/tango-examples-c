@@ -90,6 +90,9 @@ class SynchronizationApplication {
   // Set whether to use GPU or CPU upsampling
   void SetGPUUpsample(bool on);
 
+  // Reset the motion tracking system
+  void ResetPose();
+
   // Output the view to a file in RGBD format
   void CaptureImage();
 

@@ -65,6 +65,8 @@ public class TangoJNINative {
 
   public static native void setGPUUpsample(boolean on);
 
+  public static native void resetPose();
+
   public static native void captureImage();
 
   public static native void onDisplayChanged(int displayRotation, int colorCameraRotation);

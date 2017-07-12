@@ -74,6 +74,12 @@ Java_com_projecttango_examples_cpp_rgbdepthsync_TangoJNINative_setGPUUpsample(
 }
 
 JNIEXPORT void JNICALL
+Java_com_projecttango_examples_cpp_rgbdepthsync_TangoJNINative_resetPose(
+        JNIEnv*, jobject) {
+  return app.ResetPose();
+}
+
+JNIEXPORT void JNICALL
 Java_com_projecttango_examples_cpp_rgbdepthsync_TangoJNINative_captureImage(
         JNIEnv*, jobject) {
     return app.CaptureImage();

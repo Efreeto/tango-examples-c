@@ -4,13 +4,27 @@
 
 #include "rgb-depth-sync/RGBDFile.h"
 
-RGBDFile::RGBDFile(const char* file_path, GLsizei w, GLsizei h) {
-    file_path_ = file_path;
+RGBDFile::RGBDFile(GLsizei w, GLsizei h) {
     width_ = w;
     height_ = h;
-
     pixels_BGR.resize(3 * w * h);
     pixels_Alpha.resize(3 * w * h);
+
+    time_t t = time(0);
+    struct tm * now = localtime( & t );
+    std::stringstream ss;
+    ss << (now->tm_year + 1900) << '-';
+    ss.fill('0');
+    ss.width(2);
+    ss << (now->tm_mon + 1) << '-'
+       << now->tm_mday << '-'
+       << now->tm_hour << ':'
+       << now->tm_min << ':'
+       << now->tm_sec;
+    file_path_ = "/sdcard/Pictures/Tango/" + ss.str();
+    mkdir(file_path_.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+    capture_counter_ = 0;
 }
 
 RGBDFile::~RGBDFile() {
@@ -26,24 +40,21 @@ GLubyte* RGBDFile::GetAlphaPointer() {
     return &pixels_Alpha[0];
 }
 
-void RGBDFile::OutputBuffersToFiles() {
-    ReshapeOpenGL2Bitmap();
-    time_t t = time(0);
-    struct tm * now = localtime( & t );
+void RGBDFile::OutputBuffersToFiles(TangoPoseData pose_data) {
     std::stringstream ss;
-    ss << (now->tm_year + 1900) << '-'
-         << (now->tm_mon + 1) << '-'
-         << now->tm_mday << '-'
-         << now->tm_hour << ':'
-         << now->tm_min << ':'
-         << now->tm_sec;
-    std::string file_name = file_path_ + ss.str();
+    ss << std::setfill('0') << std::setw(3)
+       << capture_counter_;
+    std::string file_name = file_path_ + '/' + ss.str();
+
+    ReshapeOpenGL2Bitmap();
     OutputBufferToFile(file_name+"_rgb.bmp", &pixels_BGR);
     OutputBufferToFile(file_name+"_alpha.bmp", &pixels_Alpha);
+    OutputPoseToFile(file_name+"_pose.txt", pose_data);
+    capture_counter_++;
 }
 
 /* https://stackoverflow.com/a/2654860/2680660 */
-void RGBDFile::OutputBufferToFile(std::string file_path, std::vector<GLubyte>* pixels) {
+void RGBDFile::OutputBufferToFile(std::string file_name, std::vector<GLubyte>* pixels) {
     FILE *f;
     int filesize = 54 + 3*width_*height_;
 
@@ -65,7 +76,7 @@ void RGBDFile::OutputBufferToFile(std::string file_path, std::vector<GLubyte>* p
     bmpinfoheader[10] = (unsigned char)(height_>>16);
     bmpinfoheader[11] = (unsigned char)(height_>>24);
 
-    f = fopen(file_path.c_str(),"wb");
+    f = fopen(file_name.c_str(),"wb");
     fwrite(bmpfileheader,1,14,f);
     fwrite(bmpinfoheader,1,40,f);
     for(size_t i=0; i<height_; i++)
@@ -76,20 +87,36 @@ void RGBDFile::OutputBufferToFile(std::string file_path, std::vector<GLubyte>* p
     fclose(f);
 }
 
+void RGBDFile::OutputPoseToFile(std::string file_name, TangoPoseData pose_data) {
+    FILE *f;
+    f = fopen(file_name.c_str(),"wb");
+
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(8)
+       << "Position:\n"
+       << pose_data.translation[0] << ", "
+       << pose_data.translation[1] << ", "
+       << pose_data.translation[2] << "\n"
+       << "Orientation:\n"
+       << pose_data.orientation[0] << ", "
+       << pose_data.orientation[1] << ", "
+       << pose_data.orientation[2] << ", "
+       << pose_data.orientation[3] << "\n";
+    std::string str = ss.str();
+
+    fwrite(str.c_str(), sizeof(char), sizeof(char)*str.size(), f);
+    fclose(f);
+}
+
 void RGBDFile::ReshapeOpenGL2Bitmap() {
     for (size_t x=0; x<width_; x++) {
         for (size_t y=0; y<height_; y++) {
 
             size_t index = ( y*width_ + x ) * 3;
 
-            // change RGB to BGR
-            GLubyte temp = pixels_BGR[index+0];
-            pixels_BGR[index+0] = pixels_BGR[index+2];
-            pixels_BGR[index+2] = temp;
-
             // flip y-axis
             if (y < height_/2) {
-                GLubyte temp2[6] = {pixels_BGR[index+0],
+                GLubyte temp[6] = {pixels_BGR[index+0],
                                     pixels_BGR[index+1],
                                     pixels_BGR[index+2],
                                     pixels_Alpha[index+0],
@@ -104,13 +131,18 @@ void RGBDFile::ReshapeOpenGL2Bitmap() {
                 pixels_Alpha[index+0] = pixels_Alpha[new_index+0];
                 pixels_Alpha[index+1] = pixels_Alpha[new_index+1];
                 pixels_Alpha[index+2] = pixels_Alpha[new_index+2];
-                pixels_BGR[new_index+0] = temp2[0];
-                pixels_BGR[new_index+1] = temp2[1];
-                pixels_BGR[new_index+2] = temp2[2];
-                pixels_Alpha[new_index+0] = temp2[3];
-                pixels_Alpha[new_index+1] = temp2[4];
-                pixels_Alpha[new_index+2] = temp2[5];
+                pixels_BGR[new_index+0] = temp[0];
+                pixels_BGR[new_index+1] = temp[1];
+                pixels_BGR[new_index+2] = temp[2];
+                pixels_Alpha[new_index+0] = temp[3];
+                pixels_Alpha[new_index+1] = temp[4];
+                pixels_Alpha[new_index+2] = temp[5];
             }
+
+            // change RGB to BGR
+            GLubyte temp2 = pixels_BGR[index+0];
+            pixels_BGR[index+0] = pixels_BGR[index+2];
+            pixels_BGR[index+2] = temp2;
         }
     }
 }

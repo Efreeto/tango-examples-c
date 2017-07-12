@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
   private SeekBar mDepthOverlaySeekbar;
   private CheckBox mdebugOverlayCheckbox;
   private CheckBox mGPUUpsampleCheckbox;
+  private Button mResetButton;
   private Button mCaptureButton;
 
     
@@ -109,6 +110,13 @@ public class MainActivity extends Activity {
     }
   }
 
+  private class ResetButtonListener implements Button.OnClickListener {
+    @Override
+    public void onClick(View buttonView) {
+      TangoJNINative.resetPose();
+    }
+  }
+
   private class CaptureButtonListener implements Button.OnClickListener {
     @Override
     public void onClick(View buttonView) {
@@ -160,6 +168,9 @@ public class MainActivity extends Activity {
     mGPUUpsampleCheckbox = (CheckBox) findViewById(R.id.gpu_upsample_checkbox);
     mGPUUpsampleCheckbox.setOnCheckedChangeListener(new GPUUpsampleListener());
     mGPUUpsampleCheckbox.setChecked(true);
+
+    mResetButton = (Button) findViewById(R.id.reset_button);
+    mResetButton.setOnClickListener(new ResetButtonListener());
 
     mCaptureButton = (Button) findViewById(R.id.capture_button);
     mCaptureButton.setOnClickListener(new CaptureButtonListener());

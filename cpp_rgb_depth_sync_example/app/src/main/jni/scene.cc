@@ -22,6 +22,7 @@ namespace rgb_depth_sync {
 
 Scene::Scene() {
   camera_texture_drawable_.SetBlendAlpha(0.0f);
+  rgbd_file_ready_ = false;
 }
 
 Scene::~Scene() {}
@@ -66,13 +67,20 @@ void Scene::SetDepthAlphaValue(float alpha) {
   camera_texture_drawable_.SetBlendAlpha(alpha);
 }
 
-void Scene::CaptureImage() {
+void Scene::ResetCapture() {
+    TangoService_resetMotionTracking();
+    rgbd_file_ = RGBDFile(viewport_width_, viewport_height_);
+    rgbd_file_ready_ = true;
+}
 
+void Scene::CaptureImage() {
     if (capture_mode_ == 1) {
         LOGI("CaptureImage");
         prev_alpha_value_ = camera_texture_drawable_.GetBlendAlpha();
 
-        rgbd_file_ = RGBDFile("/sdcard/Pictures/Tango/", viewport_width_, viewport_height_);
+        if (!rgbd_file_ready_) {
+            ResetCapture();
+        }
 
         SetDepthAlphaValue(0.0);
         capture_mode_ = 2;
@@ -88,25 +96,19 @@ void Scene::CaptureImage() {
         GLubyte* pixels_Alpha = rgbd_file_.GetAlphaPointer();
         glReadPixels(0, 0, viewport_width_, viewport_height_, GL_RGB, GL_UNSIGNED_BYTE, pixels_Alpha);
 
-        rgbd_file_.OutputBuffersToFiles();
+        TangoCoordinateFramePair frames_of_reference;
+        frames_of_reference.base = TANGO_COORDINATE_FRAME_START_OF_SERVICE;
+        frames_of_reference.target = TANGO_COORDINATE_FRAME_DEVICE;
+        TangoPoseData pose_data;
+        TangoService_getPoseAtTime(0.0, frames_of_reference, &pose_data);
+
+        rgbd_file_.OutputBuffersToFiles(pose_data);
 
         SetDepthAlphaValue(prev_alpha_value_);
         capture_mode_ = 0;
     } else {
         capture_mode_ = 1;
     }
-
-//    size_t i, j, cur;
-//    FILE *f = fopen("/sdcard/hello.ppm", "w");
-//    fprintf(f, "P3\n%d %d\n%d\n", width, height, 255);
-//    for (i = 0; i < height; i++) {
-//        for (j = 0; j < width; j++) {
-//            cur = 3 * ((height - i - 1) * width + j);
-//            fprintf(f, "%3d %3d %3d ", pixels_RGB[cur], pixels_RGB[cur + 1], pixels_RGB[cur + 2]);
-//        }
-//        fprintf(f, "\n");
-//    }
-//    fclose(f);
 }
 
 }  // namespace rgb_depth_sync

@@ -316,6 +316,10 @@ void SynchronizationApplication::SetDepthAlphaValue(float alpha) {
 
 void SynchronizationApplication::SetGPUUpsample(bool on) { gpu_upsample_ = on; }
 
+void SynchronizationApplication::ResetPose() {
+  main_scene_.ResetCapture();
+}
+
 void SynchronizationApplication::CaptureImage() {
   main_scene_.CaptureImage();
 }

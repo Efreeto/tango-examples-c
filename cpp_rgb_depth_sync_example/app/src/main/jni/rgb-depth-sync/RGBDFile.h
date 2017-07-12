@@ -10,24 +10,29 @@
 #include <vector>
 #include <ctime>
 #include <sstream>
+#include <iomanip>
 #include <GLES2/gl2.h>
+#include <tango_client_api.h>
+#include <sys/stat.h>
 
 class RGBDFile {
 public:
     RGBDFile() {}
-    RGBDFile(const char* file_path, GLsizei w, GLsizei h);
+    RGBDFile(GLsizei w, GLsizei h);
     ~RGBDFile();
     GLubyte* GetBGRPointer();
     GLubyte* GetAlphaPointer();
-    void OutputBuffersToFiles();
+    void OutputBuffersToFiles(TangoPoseData pose_data);
 
 private:
     void ReshapeOpenGL2Bitmap();
-    void OutputBufferToFile(std::string file_path, std::vector<GLubyte>* pixels);
+    void OutputBufferToFile(std::string file_name, std::vector<GLubyte>* pixels);
+    void OutputPoseToFile(std::string file_name, TangoPoseData pose_data);
 
-    std::string file_path_;
     GLsizei width_;
     GLsizei height_;
+    std::string file_path_;
+    size_t capture_counter_;
 
     std::vector<GLubyte> pixels_BGR;
     std::vector<GLubyte> pixels_Alpha;

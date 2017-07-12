@@ -13,11 +13,11 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/depth_overlay_alpha_seekbar"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
         android:max="100"
         android:progress="50"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:layout_below="@+id/gpu_upsample_checkbox"
+        android:layout_alignStart="@+id/gpu_upsample_checkbox" />
 
     <CheckBox
         android:id="@+id/gpu_upsample_checkbox"
@@ -40,10 +40,20 @@
         android:layout_margin="2dp" />
 
     <Button
+        android:id="@+id/reset_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:layout_marginStart="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/depth_overlay_alpha_seekbar" />
+
+    <Button
         android:id="@+id/capture_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/depth_overlay_alpha_seekbar"
-        android:layout_centerHorizontal="true"
-        android:text="Capture" />
+        android:text="Capture"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/reset_button"
+        android:layout_marginStart="40dp" />
 </RelativeLayout>
