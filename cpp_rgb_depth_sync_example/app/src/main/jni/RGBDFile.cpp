@@ -10,16 +10,21 @@ RGBDFile::RGBDFile(GLsizei w, GLsizei h) {
     pixels_BGR.resize(3 * w * h);
     pixels_Alpha.resize(3 * w * h);
 
+    mkdir("/sdcard/Pictures/Tango", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
     time_t t = time(0);
     struct tm * now = localtime( & t );
     std::stringstream ss;
     ss << (now->tm_year + 1900) << '-';
-    ss.fill('0');
-    ss.width(2);
-    ss << (now->tm_mon + 1) << '-'
+    ss << std::setfill('0') << std::setw(2)
+       << (now->tm_mon + 1) << '-'
+       << std::setfill('0') << std::setw(2)
        << now->tm_mday << '-'
+       << std::setfill('0') << std::setw(2)
        << now->tm_hour << ':'
+       << std::setfill('0') << std::setw(2)
        << now->tm_min << ':'
+       << std::setfill('0') << std::setw(2)
        << now->tm_sec;
     file_path_ = "/sdcard/Pictures/Tango/" + ss.str();
     mkdir(file_path_.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);

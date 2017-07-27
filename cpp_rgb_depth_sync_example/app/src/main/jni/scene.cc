@@ -74,6 +74,71 @@ void Scene::ResetCapture() {
 }
 
 void Scene::CaptureImage() {
+    /* I tried to capture both color and depth images on one go.
+//     * kind of like https://github.com/apitrace/apitrace/commit/21ffc8ca702feb86e4663a41da9bbfef8f16ff09
+//     * But I couldn't do it */
+//    if (capture_mode_ == 1) {
+//        LOGI("CaptureImage");
+//        if (!rgbd_file_ready_) {
+//            ResetCapture();
+//        }
+//
+//        GLint texture = 0;
+//        glGetIntegerv(GL_NONE, &texture);
+//        LOGI("GL_NONE: [%d]", texture);
+//        glGetIntegerv(GL_TEXTURE_BINDING_2D, &texture);
+//        LOGI("GL_TEXTURE_BINDING_2D: [%d]", texture);
+//        glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &texture);
+//        LOGI("GL_TEXTURE_BINDING_CUBE_MAP: [%d]", texture);
+//        glGetIntegerv(GL_TEXTURE_BINDING_EXTERNAL_OES, &texture);
+//        LOGI("GL_TEXTURE_BINDING_EXTERNAL_OES: [%d]", texture);
+//
+//        GLint prev_fbo = 0;
+//        GLuint fbo = 0;
+//        GLenum status;
+//        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prev_fbo);
+//        glGenFramebuffers(1, &fbo);
+//        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+//
+//        glActiveTexture(GL_TEXTURE0);
+//        glBindTexture(GL_TEXTURE_EXTERNAL_OES, camera_texture_drawable_.GetColorTextureId());
+//        LOGI("Color Texture Id: [%d]", camera_texture_drawable_.GetColorTextureId());
+//        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_EXTERNAL_OES, camera_texture_drawable_.GetColorTextureId(), 0);
+//        status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+//        if (status != GL_FRAMEBUFFER_COMPLETE) {
+//            capture_mode_ = 0;
+//            LOGE("status");
+//            return;
+//        }
+//        GLubyte* pixels_RGB = rgbd_file_.GetBGRPointer();
+//        glReadPixels(0, 0, viewport_width_, viewport_height_, GL_RGB, GL_UNSIGNED_BYTE, pixels_RGB);
+//
+//        glActiveTexture(GL_TEXTURE1);
+//        glBindTexture(GL_TEXTURE_2D, camera_texture_drawable_.GetDepthTextureId());
+//        LOGI("Depth Texture Id: [%d]", camera_texture_drawable_.GetDepthTextureId());
+//        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, camera_texture_drawable_.GetDepthTextureId(), 0);
+//        status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+//        if (status != GL_FRAMEBUFFER_COMPLETE) {
+//            capture_mode_ = 0;
+//            LOGE("status");
+//            return;
+//        }
+//        GLubyte *pixels_Alpha = rgbd_file_.GetAlphaPointer();
+//        glReadPixels(0, 0, viewport_width_, viewport_height_, GL_RGB, GL_UNSIGNED_BYTE, pixels_Alpha);
+//
+//        TangoCoordinateFramePair frames_of_reference;
+//        frames_of_reference.base = TANGO_COORDINATE_FRAME_START_OF_SERVICE;
+//        frames_of_reference.target = TANGO_COORDINATE_FRAME_DEVICE;
+//        TangoPoseData pose_data;
+//        TangoService_getPoseAtTime(0.0, frames_of_reference, &pose_data);
+//
+//        rgbd_file_.OutputBuffersToFiles(pose_data);
+//
+//        glBindFramebuffer(GL_FRAMEBUFFER, prev_fbo);
+//        glDeleteFramebuffers(1, &fbo);
+//
+//        capture_mode_ = 0;
+//    }
     if (capture_mode_ == 1) {
         LOGI("CaptureImage");
         prev_alpha_value_ = camera_texture_drawable_.GetBlendAlpha();
@@ -106,7 +171,8 @@ void Scene::CaptureImage() {
 
         SetDepthAlphaValue(prev_alpha_value_);
         capture_mode_ = 0;
-    } else {
+    }
+    else {
         capture_mode_ = 1;
     }
 }

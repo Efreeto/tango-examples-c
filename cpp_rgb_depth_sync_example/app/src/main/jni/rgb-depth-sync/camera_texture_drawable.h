@@ -43,6 +43,10 @@ class CameraTextureDrawable {
   // @param texture_id: texture id which we set the color_texture_id_
   void SetColorTextureId(GLuint texture_id) { color_texture_id_ = texture_id; }
 
+  // Returns current depth texture id.
+  // @return: depth texture id
+  GLuint GetDepthTextureId() const { return depth_texture_id_; }
+
   // Set the depth texture id that is used for rendering.
   // @param texture_id: texture id which we set the depth_texture_id_
   void SetDepthTextureId(GLuint texture_id) { depth_texture_id_ = texture_id; }
